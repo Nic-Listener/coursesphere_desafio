@@ -1,49 +1,38 @@
 import React, { useEffect, useState } from 'react';
-
-interface Course {
-  id: number;
-  name: string;
-  description?: string;
-  start_date: string;
-  end_date: string;
-}
-
-const mockCourses: Course[] = [
-  {
-    id: 1,
-    name: 'Curso de React',
-    description: 'Aprenda React com projetos práticos.',
-    start_date: '2025-07-01',
-    end_date: '2025-08-30',
-  },
-  {
-    id: 2,
-    name: 'Curso de Node.js',
-    description: 'Backend com Node.js e Express.',
-    start_date: '2025-07-05',
-    end_date: '2025-09-01',
-  },
-];
+import { Course, getCoursesByUser } from '../services/CourseService';
+import { useAuth } from '../contexts/AuthContext';
 
 const DashboardPage = () => {
+  const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // Simula chamada a API
     const fetchCourses = async () => {
-      // Aqui depois trocaremos pelo Axios chamando o JSON Server
-      setCourses(mockCourses);
+      if (!user) return;
+      try {
+        const coursesData = await getCoursesByUser(user.id);
+        setCourses(coursesData);
+      } catch (err) {
+        setError('Erro ao carregar cursos');
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchCourses();
-  }, []);
+  }, [user]);
+
+  if (loading) return <p>Carregando cursos...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div style={{ padding: '20px' }}>
       <h2>Dashboard - Meus Cursos</h2>
 
       {courses.length === 0 ? (
-        <p>Nenhum curso disponível.</p>
+        <p>Você ainda não tem cursos.</p>
       ) : (
         <div style={{ display: 'grid', gap: '16px' }}>
           {courses.map((course) => (
