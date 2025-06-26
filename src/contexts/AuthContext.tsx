@@ -1,31 +1,29 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { loginUser, User } from '../services/AuthService';
 
 interface AuthContextType {
-  isAuthenticated: boolean;
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = async (email: string, password: string) => {
-    // Aqui você pode colocar uma requisição real. Por enquanto, só simulação:
-    if (email === 'admin@example.com' && password === '123456') {
-      setIsAuthenticated(true);
-    } else {
-      throw new Error('Credenciais inválidas');
-    }
+    const loggedUser = await loginUser(email, password);
+    setUser(loggedUser);
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

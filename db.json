@@ -1,0 +1,53 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "123456"
+    },
+    {
+      "id": 2,
+      "name": "Instructor One",
+      "email": "instructor1@example.com",
+      "password": "654321"
+    },
+    {
+      "id": 3,
+      "name": "Student 01",
+      "email": "student1@example.com",
+      "password": "123654"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "name": "Curso de React",
+      "description": "Aprenda React com projetos práticos.",
+      "start_date": "2025-07-01",
+      "end_date": "2025-08-30",
+      "creator_id": 1,
+      "instructors": [2]
+    }
+  ],
+  "lessons": [
+    {
+      "id": 1,
+      "title": "Introdução ao React",
+      "status": "published",
+      "publish_date": "2025-07-02",
+      "video_url": "https://www.youtube.com/watch?v=xxxx",
+      "course_id": 1,
+      "creator_id": 1
+    },
+    {
+      "id": 2,
+      "title": "Hooks em React",
+      "status": "draft",
+      "publish_date": "2025-07-05",
+      "video_url": "https://www.youtube.com/watch?v=yyyy",
+      "course_id": 1,
+      "creator_id": 2
+    }
+  ]
+}
