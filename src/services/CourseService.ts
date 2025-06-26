@@ -17,6 +17,6 @@ export const getCoursesByUser = async (userId: number): Promise<Course[]> => {
     }
   });
   return response.data.filter(
-    (course) => course.creator_id === userId || course.instructors.includes(userId)
+    (course) => course.creator_id === userId || (Array.isArray(course.instructors) && course.instructors.includes(userId))
   );
 };
